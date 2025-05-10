@@ -24,7 +24,7 @@ export interface AuthState {
     isAuthenticated: boolean
     isLoading: boolean
     error: string | null
-    register: (userData: userData) => Promise<{ success: boolean, message: string | null }>
+    register: (formData: FormData) => Promise<{ success: boolean, message: string | null }>
     login: (email: string, password: string) => Promise<{ success: boolean, message: string | null }>
     logout: () => Promise<void>
     checkAuth: () => Promise<void>

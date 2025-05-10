@@ -5,7 +5,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import useAuthStore from "@/store/authStore";
 
 const Navbar = () => {
-  const { isAuthenticated } = useAuthStore();
+  const { isAuthenticated, logout } = useAuthStore();
   const navigate = useNavigate();
 
   const handleLogin = async () => {
@@ -15,6 +15,10 @@ const Navbar = () => {
 
   const handleRegister = async () => {
     navigate("/auth/register");
+  };
+
+  const handleLogout = async () => {
+    await logout();
   };
 
   return (
@@ -40,10 +44,22 @@ const Navbar = () => {
               </a>
             )}
             {isAuthenticated ? (
-              <Avatar size="lg">
-                <AvatarImage src="/user.png" />
-                <AvatarFallback>U</AvatarFallback>
-              </Avatar>
+              <>
+                <Avatar size="lg">
+                  <AvatarImage src="/user.png" />
+                  <AvatarFallback>U</AvatarFallback>
+                </Avatar>
+
+                <div className="">
+                  <Button
+                    className="cursor-pointer"
+                    variant="outline"
+                    onClick={handleLogout}
+                  >
+                    Logout
+                  </Button>
+                </div>
+              </>
             ) : (
               <div className="flex gap-2">
                 <Button

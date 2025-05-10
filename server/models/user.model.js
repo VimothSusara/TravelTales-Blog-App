@@ -71,10 +71,10 @@ class User {
     static findUsername(username) {
         return new Promise((resolve, reject) => {
             const sql = `
-            SELECT u.id, u.email, u.password, u.role_id, ud.first_name, ud.last_name, ud.username, ud.phone_number
+            SELECT u.id, u.email, u.password, u.role_id, ud.first_name, ud.last_name, ud.username, ud.phone_number, ud.avatar_url
             FROM users u
             LEFT JOIN user_details ud ON u.id = ud.user_id
-            WHERE u.username = ?`;
+            WHERE ud.username = ?`;
             db.get(sql, [username], (err, row) => {
                 if (err) {
                     return reject(err);

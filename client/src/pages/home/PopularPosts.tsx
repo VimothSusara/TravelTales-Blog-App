@@ -8,7 +8,7 @@ const PopularPosts = () => {
       i + 1
     } that gives users a preview of the content...`,
     slug: `post-${i + 1}`,
-    imageUrl: `https://picsum.photos/id/${i}/200/300`,
+    image_url: `https://picsum.photos/id/${i}/200/300`,
     date: new Date(Date.now() - i * 86400000).toLocaleDateString(),
     likes: Math.floor(Math.random() * 100),
     comments: Math.floor(Math.random() * 100),

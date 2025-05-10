@@ -14,13 +14,14 @@ const useAuthStore = create<AuthState>()((set) => ({
     isAuthenticated: false,
     isLoading: false,
     error: null,
-    register: async (userData) => {
+    register: async (formData: FormData) => {
         try {
-            await register(userData)
+            await register(formData)
             return { success: true, message: null }
         }
         catch (err) {
             const { message } = parseApiError(err, 'Registration Failed!')
+            set({ error: message })
             return { success: false, message }
         }
     },
@@ -33,6 +34,7 @@ const useAuthStore = create<AuthState>()((set) => ({
         }
         catch (err) {
             const { message } = parseApiError(err, 'Login Failed!')
+            set({ error: message })
             return { success: false, message }
         }
         finally {

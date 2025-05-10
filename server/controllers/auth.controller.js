@@ -2,6 +2,7 @@ const {
   generateAccessToken,
   generateRefreshToken,
 } = require("../utils/jwt.utils");
+const fs = require("fs");
 
 const bcrypt = require("bcrypt");
 const crypto = require("crypto");
@@ -10,16 +11,11 @@ const User = require("../models/user.model");
 const Role = require("../models/role.model");
 
 const register = async (req, res) => {
+  console.log("req.body:", req.body);
+  console.log("req.file:", req.file);
   try {
-    const {
-      email,
-      password,
-      username,
-      first_name,
-      last_name,
-      phone_number,
-      avatar_url,
-    } = req.body;
+    const { email, password, username, first_name, last_name, phone_number } =
+      req.body;
 
     if (!email) {
       return res.status(400).json({ message: "Email is required." });
@@ -45,11 +41,23 @@ const register = async (req, res) => {
       return res.status(400).json({ message: "Phone Number required." });
     }
 
-    const existingUser = await User.findUserWithEmail(email);
+    const existingUserWithEmail = await User.findUserWithEmail(email);
 
-    if (existingUser) {
-      return res.status(400).json({ message: "Email already exists." });
+    const existingUserWithUsername = await User.findUsername(username);
+
+    if (existingUserWithEmail || existingUserWithUsername) {
+      if (req.file) {
+        fs.unlinkSync(req.file.path);
+      }
+
+      return res
+        .status(400)
+        .json({ message: "Email or Username already exists." });
     }
+
+    const avatar_url = req.file
+      ? `/uploads/avatars/${req.file.filename}`
+      : `/uploads/avatars/default-avatar.png`;
 
     const newUser = await User.register(
       email,
@@ -58,7 +66,7 @@ const register = async (req, res) => {
       first_name,
       last_name,
       phone_number,
-      avatar_url || null
+      avatar_url
     );
 
     return res.status(200).json({
@@ -66,6 +74,10 @@ const register = async (req, res) => {
       user: newUser,
     });
   } catch (error) {
+    if (req.file) {
+      fs.unlinkSync(req.file.path);
+    }
+
     res
       .status(500)
       .json({ message: error?.message || "Error while registering user" });

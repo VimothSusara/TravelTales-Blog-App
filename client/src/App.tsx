@@ -4,6 +4,7 @@ import {
   Route,
   Navigate,
 } from "react-router-dom";
+import { useEffect } from "react";
 
 //pages
 import Navbar from "@/components/Navbar";
@@ -19,7 +20,33 @@ import MainLayout from "@/layouts/MainLayout";
 import RecentPostView from "@/pages/home/RecentPostView";
 import BlogLayout from "@/layouts/BlogLayout";
 
+//wrappers
+import ProtectedRoute from "@/components/protectedWrappers/ProtectedRoute";
+import AuthRoute from "@/components/protectedWrappers/AuthRoute";
+
+//store
+import useAuthStore from "@/store/authStore";
+
 function App() {
+  const { checkAuth, isLoading } = useAuthStore();
+
+  useEffect(() => {
+    const verifyAuth = async () => {
+      try {
+        await checkAuth();
+      } catch (e) {
+        console.log(e);
+      }
+    };
+
+    verifyAuth();
+  }, [checkAuth]);
+
+  if (isLoading) {
+    //TODO: add loading screen
+    return <div>Loading...</div>;
+  }
+
   return (
     <>
       <Router>
@@ -36,8 +63,22 @@ function App() {
             <Route path=":slug/:id" element={<RecentPostView />} />
           </Route>
           <Route path="/auth/" element={<AuthLayout />}>
-            <Route path="register" element={<Register />} />
-            <Route path="login" element={<Login />} />
+            <Route
+              path="register"
+              element={
+                <AuthRoute>
+                  <Register />
+                </AuthRoute>
+              }
+            />
+            <Route
+              path="login"
+              element={
+                <AuthRoute>
+                  <Login />
+                </AuthRoute>
+              }
+            />
           </Route>
         </Routes>
       </Router>
