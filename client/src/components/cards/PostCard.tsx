@@ -1,7 +1,12 @@
 import { useNavigate } from "react-router-dom";
 
+import { formatDistance, subDays, format } from "date-fns";
+
 //types
 import { Post } from "@/types/blog";
+
+//image Url
+import { getImageUrl } from "@/utils/imageLink";
 
 //components
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -29,19 +34,19 @@ import {
 const RecentPostCard = ({ post }: { post: Post }) => {
   const navigate = useNavigate();
 
+  const handleProfileDirect = () => {
+    navigate(`/profile/${post.author.username}`);
+  };
+
   return (
     <>
-      <div
-        className="flex h-40 overflow-hidden rounded transition cursor-pointer"
-        key={post.id}
-        onClick={() => navigate(`/blog/${post.slug}/${post.author.id}`)}
-      >
+      <div className="flex h-40 overflow-hidden rounded transition cursor-pointer">
         {/* Text Section */}
-        <div className="w-3/4 p-4 flex flex-col justify-between">
+        <div className="w-5/6 p-4 flex flex-col justify-between">
           {/* Author */}
           <div className="flex items-center gap-2">
             <Avatar size="sm">
-              <AvatarImage src={post.author.avatar_url} />
+              <AvatarImage src={getImageUrl(post.author.avatar_url)} />
               <AvatarFallback>U</AvatarFallback>
             </Avatar>
             <div className="text-sm flex items-center text-muted-foreground">
@@ -52,16 +57,26 @@ const RecentPostCard = ({ post }: { post: Post }) => {
                     {post.author.username}
                   </Button>
                 </HoverCardTrigger>
-                <HoverCardContent className="w-80">
+                <HoverCardContent className="w-64">
                   <div className="flex items-center gap-4">
                     <Avatar>
-                      <AvatarImage src={post.author.avatar_url} />
+                      <AvatarImage src={getImageUrl(post.author.avatar_url)} />
                       <AvatarFallback>U</AvatarFallback>
                     </Avatar>
                     <div className="space-y-1">
                       <h4 className="text-sm font-semibold">
                         {post.author.username}
                       </h4>
+                    </div>
+                    <div className="">
+                      <Button
+                        variant="outline"
+                        size={"sm"}
+                        className="cursor-pointer"
+                        onClick={handleProfileDirect}
+                      >
+                        View Profile
+                      </Button>
                     </div>
                   </div>
                 </HoverCardContent>
@@ -70,7 +85,17 @@ const RecentPostCard = ({ post }: { post: Post }) => {
           </div>
 
           {/* Title & Excerpt */}
-          <div className="space-y-1">
+          <div
+            className="space-y-2"
+            onClick={() =>
+              navigate(
+                `/blog/${post.author.username}/${post.slug}/${post.id}`,
+                {
+                  state: { id: post.id },
+                }
+              )
+            }
+          >
             <h2 className="text-base font-semibold leading-tight">
               {post.title}
             </h2>
@@ -80,15 +105,11 @@ const RecentPostCard = ({ post }: { post: Post }) => {
           </div>
 
           {/* Footer: Comments & Likes */}
-          <div className="flex items-center justify-between pt-2">
+          <div className="flex items-center justify-between pt-2 md:mt-1 mt-0.5">
             <div className="flex items-center gap-4 text-muted-foreground text-sm">
               <div className="flex items-center">
                 <p className="text-muted-foreground text-sm">
-                  {new Date(post.date).toLocaleDateString("en-US", {
-                    day: "2-digit",
-                    month: "short",
-                    year: "numeric",
-                  })}
+                  {format(post.created, "PPP")}
                 </p>
               </div>
               <div className="flex items-center gap-1 group hover:text-foreground transition-colors">
@@ -107,8 +128,10 @@ const RecentPostCard = ({ post }: { post: Post }) => {
                   <TooltipTrigger>
                     <Heart
                       size={16}
-                      className={`transition-colors group-hover:fill-muted cursor-pointer ${
-                        post.liked ? "fill-red-500 border-none" : ""
+                      className={`transition-colors cursor-pointer ${
+                        post.liked
+                          ? "fill-red-500 text-red-500"
+                          : "text-current"
                       }`}
                     />
                   </TooltipTrigger>
@@ -142,7 +165,7 @@ const RecentPostCard = ({ post }: { post: Post }) => {
         {/* Image Section */}
         <div className="w-1/4 flex items-center justify-center">
           <img
-            src={post.imageUrl}
+            src={getImageUrl(post.image_url)}
             alt={post.title}
             className="h-2/3 w-full object-cover rounded"
           />

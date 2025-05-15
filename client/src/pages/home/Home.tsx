@@ -1,6 +1,8 @@
 import { useEffect } from "react";
 import { NavLink, Outlet } from "react-router-dom";
 
+import { ClockFading, HeartPulse } from "lucide-react";
+
 //hooks
 // import useScrollRestore from "@/hooks/useScrollRestore";
 
@@ -14,17 +16,27 @@ const Home = () => {
           <NavLink
             to="recent"
             className={({ isActive }) =>
-              isActive ? "text-blue-400 font-normal" : "text-muted-foreground"
+              `${
+                isActive
+                  ? "text-gray-800 font-semibold border-gray-900 border-b-2"
+                  : "text-muted-foreground"
+              } px-5 py-1 rounded-md flex justify-center items-center align-middle`
             }
           >
+            <ClockFading size={17} className="mr-2" />
             Recent
           </NavLink>
           <NavLink
             to="popular"
             className={({ isActive }) =>
-              isActive ? "text-blue-400 font-normal" : "text-muted-foreground"
+              `${
+                isActive
+                  ? "text-gray-800 font-semibold border-gray-900 border-b-2"
+                  : "text-muted-foreground"
+              } px-5 py-1 rounded-md flex justify-center items-center align-middle`
             }
           >
+            <HeartPulse size={17} className="mr-2" />
             Popular
           </NavLink>
         </div>

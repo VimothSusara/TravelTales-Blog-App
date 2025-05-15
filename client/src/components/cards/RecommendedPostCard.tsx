@@ -1,8 +1,13 @@
 //types
 import { Post } from "@/types/blog";
 
+import { formatDistance, subDays, format } from "date-fns";
+
+//image Url
+import { getImageUrl } from "@/utils/imageLink";
+
 //components
-import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 const RecommendedPostCard = ({ post }: { post: Post }) => {
   return (
@@ -10,7 +15,7 @@ const RecommendedPostCard = ({ post }: { post: Post }) => {
       <div className="w-full flex flex-col gap-1 p-1">
         <div className="flex gap-1">
           <Avatar size="sm">
-            <AvatarImage src={post.author.avatar_url} />
+            <AvatarImage src={getImageUrl(post.author.avatar_url)} />
             <AvatarFallback>U</AvatarFallback>
           </Avatar>
           <div className="text-sm flex items-center text-muted-foreground">
@@ -23,11 +28,7 @@ const RecommendedPostCard = ({ post }: { post: Post }) => {
             : post.title}
         </div>
         <div className="text-[.8rem] text-muted-foreground">
-          {new Date(post.date).toLocaleDateString("en-US", {
-            day: "2-digit",
-            month: "short",
-            year: "numeric",
-          })}
+          {format(post.created, "PPP")}
         </div>
       </div>
     </>

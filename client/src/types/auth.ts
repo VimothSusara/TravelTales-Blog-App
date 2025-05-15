@@ -7,6 +7,10 @@ export interface User {
     email: string
     phone_number: string
     avatar_url: string
+    follow_details: {
+        following_count: number
+        follower_count: number
+    } | null
 }
 
 export interface userData {

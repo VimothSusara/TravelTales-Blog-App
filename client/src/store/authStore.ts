@@ -16,8 +16,13 @@ const useAuthStore = create<AuthState>()((set) => ({
     error: null,
     register: async (formData: FormData) => {
         try {
-            await register(formData)
-            return { success: true, message: null }
+            const response = await register(formData)
+            if (response.data.success) {
+                return { success: true, message: response.data.message || 'Registration successful. Please login.' }
+            }
+            else {
+                return { success: false, message: response.data.message || 'Registration Failed!' }
+            }
         }
         catch (err) {
             const { message } = parseApiError(err, 'Registration Failed!')
@@ -29,8 +34,12 @@ const useAuthStore = create<AuthState>()((set) => ({
         set({ isLoading: true, error: null })
         try {
             const response = await login(email, password)
+
+            if (!response.data.success) {
+                return { success: false, message: response.data.message || 'Login Failed!' }
+            }
             set({ user: response?.data?.user, isAuthenticated: true })
-            return { success: true, message: null }
+            return { success: true, message: "Login successful" }
         }
         catch (err) {
             const { message } = parseApiError(err, 'Login Failed!')

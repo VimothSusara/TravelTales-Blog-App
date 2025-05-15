@@ -20,6 +20,7 @@ import {
 } from "@/components/ui/card";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Loader2, Upload } from "lucide-react";
+import { Flip, toast, ToastContainer } from "react-toastify";
 
 const Register = () => {
   const navigate = useNavigate();
@@ -85,6 +86,7 @@ const Register = () => {
 
     if (response.success) {
       console.log("Registration successful. Please login.");
+      toast.success("Registration successful. Please login.");
       navigate("/auth/login");
     } else {
       console.log("Register failed!", response.message);
@@ -286,6 +288,14 @@ const Register = () => {
           </p>
         </CardFooter>
       </Card>
+      <ToastContainer
+        position="top-center"
+        autoClose={1200}
+        hideProgressBar={true}
+        closeOnClick={false}
+        theme="dark"
+        transition={Flip}
+      />
     </div>
   );
 };

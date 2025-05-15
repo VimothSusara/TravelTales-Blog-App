@@ -35,7 +35,7 @@ app.use(cookieParser());
 db.serialize(() => {
   // User.createUserDetailsTable();
   // Role.createTable();
-  // Blog.alterBlogTable()
+  // Blog.createFollowsTable()
 });
 
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));

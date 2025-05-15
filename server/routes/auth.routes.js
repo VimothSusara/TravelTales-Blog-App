@@ -1,8 +1,11 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
 
 const authController = require("../controllers/auth.controller");
-const upload = require('../middleware/multer');
+const blogController = require("../controllers/blog.controller");
+const upload = require("../middleware/multer");
+
+const authTokenMiddleware = require("../middleware/auth.token.middleware");
 
 //register user
 router.post("/register", upload.single("avatar"), authController.register);
@@ -18,5 +21,16 @@ router.post("/addRole", authController.addRole);
 
 //logout user
 router.get("/logout", authController.logout);
+
+//get profile
+router.get("/profile/:username", authController.getProfileWithUsername);
+
+router.use(authTokenMiddleware);
+
+//follow user
+router.post("/follow/:id", blogController.followUser);
+
+//unfollow user
+router.post("/unfollow/:id", blogController.unfollowUser);
 
 module.exports = router;

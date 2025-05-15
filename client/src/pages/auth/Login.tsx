@@ -20,6 +20,7 @@ import {
 } from "@/components/ui/card";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Loader2, Upload } from "lucide-react";
+import { Flip, toast, ToastContainer } from "react-toastify";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -41,7 +42,11 @@ const Login = () => {
   const onSubmit = async (data: LoginFormData) => {
     try {
       setLoginLoading(true);
-      await loginUser(data.email, data.password);
+      const response = await loginUser(data.email, data.password);
+
+      if (response.success) {
+        toast.success("Login successful!");
+      }
     } catch (err) {
       console.log(err);
     } finally {
@@ -103,6 +108,14 @@ const Login = () => {
           </form>
         </CardContent>
       </Card>
+      <ToastContainer
+        position="top-center"
+        autoClose={1200}
+        hideProgressBar={true}
+        closeOnClick={false}
+        theme="dark"
+        transition={Flip}
+      />
     </div>
   );
 };

@@ -1,11 +1,48 @@
 import { NavLink, useNavigate } from "react-router-dom";
+
 import { Button } from "@/components/ui/button";
-import { Home, Search, SquarePen } from "lucide-react";
+import {
+  Home,
+  Search,
+  SquarePen,
+  Cloud,
+  CreditCard,
+  Github,
+  Keyboard,
+  LifeBuoy,
+  LogOut,
+  Mail,
+  MessageSquare,
+  Plus,
+  PlusCircle,
+  Settings,
+  User,
+  UserPlus,
+  Users,
+  LogOutIcon,
+} from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuPortal,
+  DropdownMenuSeparator,
+  DropdownMenuShortcut,
+  DropdownMenuSub,
+  DropdownMenuSubContent,
+  DropdownMenuSubTrigger,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+
+import { getImageUrl } from "@/utils/imageLink";
+
 import useAuthStore from "@/store/authStore";
 
 const Navbar = () => {
-  const { isAuthenticated, logout } = useAuthStore();
+  const { isAuthenticated, logout, user } = useAuthStore();
   const navigate = useNavigate();
 
   const handleLogin = async () => {
@@ -19,6 +56,7 @@ const Navbar = () => {
 
   const handleLogout = async () => {
     await logout();
+    navigate("/");
   };
 
   return (
@@ -33,32 +71,51 @@ const Navbar = () => {
               <Home className="h-5 w-5" />
               <span className="ml-2 hidden md:inline">Home</span>
             </NavLink>
-            <a href="#" className="hover:text-blue-700 flex items-center">
+            <NavLink to={"/search"} className="hover:text-blue-700 flex items-center">
               <Search className="h-5 w-5" />
               <span className="ml-2 hidden md:inline">Search</span>
-            </a>
+            </NavLink>
             {isAuthenticated && (
-              <a href="#" className="hover:text-blue-700 flex items-center">
+              <NavLink
+                to={"/blog/create"}
+                className="hover:text-blue-700 flex items-center"
+              >
                 <SquarePen className="h-5 w-5" />
                 <span className="ml-2 hidden md:inline">Write</span>
-              </a>
+              </NavLink>
             )}
             {isAuthenticated ? (
               <>
-                <Avatar size="lg">
-                  <AvatarImage src="/user.png" />
-                  <AvatarFallback>U</AvatarFallback>
-                </Avatar>
-
-                <div className="">
-                  <Button
-                    className="cursor-pointer"
-                    variant="outline"
-                    onClick={handleLogout}
-                  >
-                    Logout
-                  </Button>
-                </div>
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Avatar size="md" className="cursor-pointer">
+                      <AvatarImage src={getImageUrl(user?.avatar_url || "")} />
+                      <AvatarFallback>U</AvatarFallback>
+                    </Avatar>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent className="w-56">
+                    <DropdownMenuLabel>My Account</DropdownMenuLabel>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuGroup>
+                      <NavLink to={`/profile/${user?.username}`}>
+                        <DropdownMenuItem>
+                          <User className="mr-2 h-4 w-4" />
+                          <span>Profile</span>
+                        </DropdownMenuItem>
+                      </NavLink>
+                      <DropdownMenuItem>
+                        <SquarePen className="mr-2 h-4 w-4" />
+                        <span>Settings</span>
+                      </DropdownMenuItem>
+                      <NavLink to={""} onClick={handleLogout}>
+                        <DropdownMenuItem>
+                          <LogOutIcon className="mr-2 h-4 w-4" />
+                          <span>Logout</span>
+                        </DropdownMenuItem>
+                      </NavLink>
+                    </DropdownMenuGroup>
+                  </DropdownMenuContent>
+                </DropdownMenu>
               </>
             ) : (
               <div className="flex gap-2">
