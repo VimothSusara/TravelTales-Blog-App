@@ -8,10 +8,12 @@ Welcome to TravelTales, a lively community where passion for travel meets storyt
 
 - User Registration and management
 - Blog Management
+- Filtering of blog posts based on country, author, multiple sort options.
+- User interactions (blog liking, following users)
 - React frontend (Vite)
 - Node.js + Express backend
 - SQLite database
-- COntainerized server side to access sanitized countries data
+- Containerized server side to access sanitized countries data
 
 ---
 
@@ -65,4 +67,4 @@ cd restcountries_microservice
 ```
 Follow setup instructions
 
-# You are ready to go!!
+## You are ready to go!!
