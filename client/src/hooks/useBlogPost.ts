@@ -20,7 +20,7 @@ const useBlogPost = (blogId: string | undefined) => {
                 const response = await getPost(blogId, user ? user?.id : null);
                 setPost(response.data.blog);
             } catch (error) {
-                setError("Failed to fetch post. Please try again later.");
+                setError(error.message ||"Failed to fetch post. Please try again later.");
             } finally {
                 setLoading(false);
             }

@@ -7,7 +7,6 @@ import { Post } from "@/types/blog";
 import RecommendedPostCard from "@/components/cards/RecommendedPostCard";
 import { getPosts } from "@/services/blogService";
 
-import { Button } from "@/components/ui/button";
 import useAuthStore from "@/store/authStore";
 
 const RecommendedSection = () => {
@@ -18,7 +17,7 @@ const RecommendedSection = () => {
   const [hasMore, setHasMore] = useState(true);
   const [error, setError] = useState("");
   const limit = 3;
-  const abortControllerRef = useRef<AbortController>();
+  const abortControllerRef = useRef<AbortController>(null);
 
   const fetchPosts = async (pageToFetch: number) => {
     if (loading || !hasMore) return;
@@ -31,12 +30,15 @@ const RecommendedSection = () => {
 
     setLoading(true);
     try {
-      const response = await getPosts({
-        sort_by: "popular",
-        page: pageToFetch,
-        limit,
-        signal: controller.signal,
-      }, user ? user.id : null);
+      const response = await getPosts(
+        {
+          sort_by: "popular",
+          page: pageToFetch,
+          limit,
+          signal: controller.signal,
+        },
+        user ? user.id : null
+      );
 
       if (!controller.signal.aborted) {
         setPosts((prev) =>
@@ -73,6 +75,8 @@ const RecommendedSection = () => {
         {posts.map((post) => (
           <RecommendedPostCard key={post.id} post={post} />
         ))}
+        {error && <p>{error}</p>}
+        {nextPage}
       </div>
     </>
   );

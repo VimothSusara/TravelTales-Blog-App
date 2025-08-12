@@ -1,4 +1,3 @@
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Outlet } from "react-router-dom";
 
 const AuthLayout = () => {

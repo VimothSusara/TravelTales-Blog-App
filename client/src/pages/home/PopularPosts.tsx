@@ -21,7 +21,7 @@ const PopularPosts = () => {
   const [hasMore, setHasMore] = useState(true);
   const [error, setError] = useState("");
   const limit = 5;
-  const abortControllerRef = useRef<AbortController>();
+  const abortControllerRef = useRef<AbortController>(null);
 
   const fetchPosts = async (pageToFetch: number) => {
     setLoading(true);
@@ -75,10 +75,6 @@ const PopularPosts = () => {
     fetchPosts(nextPage);
   };
 
-  const handleRefresh = () => {
-    fetchPosts(1);
-  };
-
   return (
     <div className="w-full md:w-5/6 mx-auto">
       {loading && <InPageLoadingScreen />}
@@ -104,6 +100,10 @@ const PopularPosts = () => {
 
       {!hasMore && posts.length > 0 && (
         <p className="text-gray-500 text-center">You've reached the end!</p>
+      )}
+
+      {error && (
+        <p className="text-red-500 text-center mt-2">{error}</p>
       )}
     </div>
   );

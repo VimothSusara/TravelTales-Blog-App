@@ -1,15 +1,14 @@
-import { Comment, Post } from "@/types/blog";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { getImageUrl } from "@/utils/imageLink";
-import { format } from "date-fns";
-import { useState } from "react";
+import { Post } from "@/types/blog";
 
 const PostComments = ({ post }: { post: Post }) => {
-  const [comments, setComments] = useState<Comment[]>([]);
 
   return (
     <>
-      <div className=""></div>
+      <div className="">
+        <div className="text-[0.8rem] text-muted-foreground">
+          {post?.comments} comments
+        </div>
+      </div>
     </>
   );
 };

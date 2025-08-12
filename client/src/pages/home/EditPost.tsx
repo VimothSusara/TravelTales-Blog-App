@@ -6,7 +6,7 @@ import Underline from "@tiptap/extension-underline";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { X, Loader2 } from "lucide-react";
-import { ToastContainer, toast, Slide, Flip } from "react-toastify";
+import { ToastContainer, toast, Flip } from "react-toastify";
 import Select, { components } from "react-select";
 
 //types
@@ -141,7 +141,7 @@ const Toolbar = ({ editor }: { editor: any }) => {
 };
 
 const EditPost = () => {
-  const { isAuthenticated, user } = useAuthStore();
+  const { user } = useAuthStore();
   const { id: blog_id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const [title, setTitle] = useState("");

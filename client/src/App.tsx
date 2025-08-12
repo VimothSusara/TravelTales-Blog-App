@@ -33,9 +33,9 @@ import useAuthStore from "@/store/authStore";
 
 import { LoadingScreen } from "@/components/common/LoadingScreen";
 
-const RouteWithSuspense = ({ children }: { children: React.ReactNode }) => {
-  return <Suspense fallback={<LoadingScreen />}>{children}</Suspense>;
-};
+// const RouteWithSuspense = ({ children }: { children: React.ReactNode }) => {
+//   return <Suspense fallback={<LoadingScreen />}>{children}</Suspense>;
+// };
 
 function App() {
   const { checkAuth, isLoading } = useAuthStore();
