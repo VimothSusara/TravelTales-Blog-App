@@ -31,4 +31,13 @@ export const registerSchema = yup.object({
         }).required("Avatar is required"),
 });
 
-export type RegisterFormData = yup.InferType<typeof registerSchema>;
+export type RegisterFormData = {
+    username: string;
+    first_name: string;
+    last_name: string; // required
+    phone_number: string;
+    email: string;
+    password: string;
+    rePassword: string;
+    avatar: any; // required
+};
