@@ -19,7 +19,7 @@ const useBlogPost = (blogId: string | undefined) => {
                 console.log("User ID: ", user?.id);
                 const response = await getPost(blogId, user ? user?.id : null);
                 setPost(response.data.blog);
-            } catch (error) {
+            } catch (error : any) {
                 setError(error.message ||"Failed to fetch post. Please try again later.");
             } finally {
                 setLoading(false);

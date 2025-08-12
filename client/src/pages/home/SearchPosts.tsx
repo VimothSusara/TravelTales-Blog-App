@@ -1,7 +1,14 @@
 import { Loader2, Search, X } from "lucide-react";
 
 import { useEffect, useState } from "react";
-import Select, { components, OptionProps, SingleValueProps } from "react-select";
+import Select, {
+  ActionMeta,
+  components,
+  MultiValue,
+  OptionProps,
+  type SingleValue,
+  SingleValueProps,
+} from "react-select";
 
 import { getCountries } from "@/services/countriesService";
 
@@ -150,9 +157,17 @@ const SearchPosts = () => {
     setFilter(option);
   };
 
-  const handleCountryChange = (selectedOption: CountryOption | null) => {
-    setSelectedCountry(selectedOption);
-    setCountry(selectedOption ? selectedOption.value : "");
+  const handleCountryChange = (
+    newValue: SingleValue<CountryOption> // <-- only single value or null
+  ) => {
+    if (!newValue) {
+      setSelectedCountry(null);
+      setCountry("");
+      return;
+    }
+
+    setSelectedCountry(newValue);
+    setCountry(newValue.value);
   };
 
   const handleClearFilters = () => {
@@ -187,7 +202,14 @@ const SearchPosts = () => {
                 options={countries}
                 styles={selectStyles}
                 value={selectedCountry}
-                onChange={handleCountryChange}
+                onChange={
+                  handleCountryChange as (
+                    newValue:
+                      | SingleValue<CountryOption>
+                      | MultiValue<CountryOption>,
+                    actionMeta: ActionMeta<CountryOption>
+                  ) => void
+                }
                 placeholder="Select country"
                 isClearable
                 className="country-select"
