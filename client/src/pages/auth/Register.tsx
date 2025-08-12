@@ -110,9 +110,9 @@ const Register = () => {
                 id="username"
                 {...register("username")}
                 placeholder="johndoe"
-                className={errors.username ? "border-red-500" : ""}
+                className={errors.username?.message ? "border-red-500" : ""}
               />
-              {errors.username && (
+              {errors.username?.message && (
                 <p className="text-sm text-red-500">
                   {errors.username.message}
                 </p>
@@ -125,9 +125,9 @@ const Register = () => {
                   id="first_name"
                   {...register("first_name")}
                   placeholder="First Name"
-                  className={errors.first_name ? "border-red-500" : ""}
+                  className={errors.first_name?.message ? "border-red-500" : ""}
                 />
-                {errors.first_name && (
+                {errors.first_name?.message && (
                   <p className="text-sm text-red-500">
                     {errors.first_name.message}
                   </p>
@@ -139,9 +139,9 @@ const Register = () => {
                   id="last_name"
                   {...register("last_name")}
                   placeholder="Last Name"
-                  className={errors.last_name ? "border-red-500" : ""}
+                  className={errors.last_name?.message ? "border-red-500" : ""}
                 />
-                {errors.last_name && (
+                {errors.last_name?.message && (
                   <p className="text-sm text-red-500">
                     {errors.last_name?.message}
                   </p>
@@ -156,9 +156,9 @@ const Register = () => {
                   id="phone_number"
                   {...register("phone_number")}
                   placeholder="Phone Number"
-                  className={errors.phone_number ? "border-red-500" : ""}
+                  className={errors.phone_number?.message ? "border-red-500" : ""}
                 />
-                {errors.phone_number && (
+                {errors.phone_number?.message && (
                   <p className="text-sm text-red-500">
                     {errors.phone_number.message}
                   </p>
@@ -172,9 +172,9 @@ const Register = () => {
                   type="email"
                   {...register("email")}
                   placeholder="john@example.com"
-                  className={errors.email ? "border-red-500" : ""}
+                  className={errors.email?.message ? "border-red-500" : ""}
                 />
-                {errors.email && (
+                {errors.email?.message && (
                   <p className="text-sm text-red-500">{errors.email.message}</p>
                 )}
               </div>
@@ -187,9 +187,9 @@ const Register = () => {
                   id="password"
                   type="password"
                   {...register("password")}
-                  className={errors.password ? "border-red-500" : ""}
+                  className={errors.password?.message ? "border-red-500" : ""}
                 />
-                {errors.password && (
+                {errors.password?.message && (
                   <p className="text-sm text-red-500">
                     {errors.password.message}
                   </p>
@@ -202,9 +202,9 @@ const Register = () => {
                   id="rePassword"
                   type="password"
                   {...register("rePassword")}
-                  className={errors.rePassword ? "border-red-500" : ""}
+                  className={errors.rePassword?.message ? "border-red-500" : ""}
                 />
-                {errors.rePassword && (
+                {errors.rePassword?.message && (
                   <p className="text-sm text-red-500">
                     {errors.rePassword.message}
                   </p>
@@ -253,7 +253,7 @@ const Register = () => {
                   </p>
                   {errors.avatar && (
                     <p className="text-sm text-red-500">
-                      {errors.avatar.message}
+                      {errors.avatar?.message?.toString()}
                     </p>
                   )}
                 </div>
