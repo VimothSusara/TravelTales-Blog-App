@@ -33,6 +33,7 @@ export const registerSchema = yup.object({
 
 type YupRegisterType = yup.InferType<typeof registerSchema>;
 
-export type RegisterFormData = Omit<YupRegisterType, "avatar"> & {
+export type RegisterFormData = Omit<YupRegisterType, "avatar" | "last_name"> & {
     avatar: any;
+    last_name: string;
 };
