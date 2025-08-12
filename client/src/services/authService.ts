@@ -2,15 +2,11 @@ import axios from "axios";
 
 const API_BASE_URL = import.meta.env.VITE_SERVER_HOST;
 
-//types
-import { userData } from "@/types/auth";
-
-export const register = async (userData: userData) => {
+export const register = async (formData: FormData) => {
+    console.log(formData);
     return await axios.post(
         `${API_BASE_URL}api/auth/register`,
-        {
-            userData,
-        },
+        formData,
         {
             withCredentials: true,
         }

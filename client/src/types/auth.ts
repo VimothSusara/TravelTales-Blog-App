@@ -7,6 +7,10 @@ export interface User {
     email: string
     phone_number: string
     avatar_url: string
+    follow_details: {
+        following_count: number
+        follower_count: number
+    } | null
 }
 
 export interface userData {
@@ -24,7 +28,7 @@ export interface AuthState {
     isAuthenticated: boolean
     isLoading: boolean
     error: string | null
-    register: (userData: userData) => Promise<{ success: boolean, message: string | null }>
+    register: (formData: FormData) => Promise<{ success: boolean, message: string | null }>
     login: (email: string, password: string) => Promise<{ success: boolean, message: string | null }>
     logout: () => Promise<void>
     checkAuth: () => Promise<void>

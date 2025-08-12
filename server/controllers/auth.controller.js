@@ -2,6 +2,7 @@ const {
   generateAccessToken,
   generateRefreshToken,
 } = require("../utils/jwt.utils");
+const fs = require("fs");
 
 const bcrypt = require("bcrypt");
 const crypto = require("crypto");
@@ -10,46 +11,65 @@ const User = require("../models/user.model");
 const Role = require("../models/role.model");
 
 const register = async (req, res) => {
+  console.log("req.body:", req.body);
+  console.log("req.file:", req.file);
   try {
-    const {
-      email,
-      password,
-      username,
-      first_name,
-      last_name,
-      phone_number,
-      avatar_url,
-    } = req.body;
+    const { email, password, username, first_name, last_name, phone_number } =
+      req.body;
 
     if (!email) {
-      return res.status(400).json({ message: "Email is required." });
+      return res
+        .status(400)
+        .json({ message: "Email is required.", success: false });
     }
 
     if (!password) {
-      return res.status(400).json({ message: "Password is required." });
+      return res
+        .status(400)
+        .json({ message: "Password is required.", success: false });
     }
 
     if (!username) {
-      return res.status(400).json({ message: "Username is required." });
+      return res
+        .status(400)
+        .json({ message: "Username is required.", success: false });
     }
 
     if (!first_name) {
-      return res.status(400).json({ message: "First Name is required." });
+      return res
+        .status(400)
+        .json({ message: "First Name is required.", success: false });
     }
 
     if (!last_name) {
-      return res.status(400).json({ message: "Last Name is required." });
+      return res
+        .status(400)
+        .json({ message: "Last Name is required.", success: false });
     }
 
     if (!phone_number) {
-      return res.status(400).json({ message: "Phone Number required." });
+      return res
+        .status(400)
+        .json({ message: "Phone Number required.", success: false });
     }
 
-    const existingUser = await User.findUserWithEmail(email);
+    const existingUserWithEmail = await User.findUserWithEmail(email);
 
-    if (existingUser) {
-      return res.status(400).json({ message: "Email already exists." });
+    const existingUserWithUsername = await User.findUsername(username);
+
+    if (existingUserWithEmail || existingUserWithUsername) {
+      if (req.file) {
+        fs.unlinkSync(req.file.path);
+      }
+
+      return res
+        .status(400)
+        .json({ message: "Email or Username already exists.", success: false });
     }
+
+    const avatar_url = req.file
+      ? `/uploads/avatars/${req.file.filename}`
+      : `/uploads/avatars/default-avatar.png`;
 
     const newUser = await User.register(
       email,
@@ -58,17 +78,23 @@ const register = async (req, res) => {
       first_name,
       last_name,
       phone_number,
-      avatar_url || null
+      avatar_url
     );
 
     return res.status(200).json({
       message: "User registered successfully.",
       user: newUser,
+      success: true,
     });
   } catch (error) {
-    res
-      .status(500)
-      .json({ message: error?.message || "Error while registering user" });
+    if (req.file) {
+      fs.unlinkSync(req.file.path);
+    }
+
+    res.status(500).json({
+      message: error?.message || "Error while registering user",
+      success: false,
+    });
   }
 };
 
@@ -96,6 +122,8 @@ const login = async (req, res) => {
       return res.status(400).json({ message: "Invalid Credentials." });
     }
 
+    const follow_details = await User.getFollowDetails(user.id);
+
     const accessToken = generateAccessToken(user);
     const refreshToken = generateRefreshToken(user);
 
@@ -112,6 +140,7 @@ const login = async (req, res) => {
     });
 
     return res.status(200).json({
+      success: true,
       message: "Login Successful",
       user: {
         id: user.id,
@@ -122,12 +151,14 @@ const login = async (req, res) => {
         email: user.email,
         phone_number: user.phone_number,
         avatar_url: user.avatar_url,
+        follow_details: follow_details,
       },
     });
   } catch (error) {
-    return res
-      .status(500)
-      .json({ message: error?.message || "Error while logging in" });
+    return res.status(500).json({
+      message: error?.message || "Error while logging in",
+      success: false,
+    });
   }
 };
 
@@ -136,16 +167,19 @@ const checkAuth = async (req, res) => {
     const accessToken = req.cookies.access_token;
 
     if (!accessToken) {
-      return res.status(401).json({ authenticated: true });
+      return res.status(401).json({ authenticated: false, success: false });
     }
 
     const user = await User.verifyAccessToken(accessToken);
 
     if (!user) {
-      return res.status(403).json({ authenticated: false });
+      return res.status(403).json({ authenticated: false, success: false });
     }
 
+    const follow_details = await User.getFollowDetails(user.id);
+
     return res.status(200).json({
+      success: true,
       authenticated: true,
       user: {
         id: user.id,
@@ -156,12 +190,14 @@ const checkAuth = async (req, res) => {
         email: user.email,
         phone_number: user.phone_number,
         avatar_url: user.avatar_url,
+        follow_details: follow_details,
       },
     });
   } catch (error) {
-    return res
-      .status(500)
-      .json({ message: error?.message || "Authentication failed" });
+    return res.status(500).json({
+      message: error?.message || "Authentication failed",
+      success: false,
+    });
   }
 };
 
@@ -176,19 +212,57 @@ const addRole = async (req, res) => {
     const { role_name } = req.body;
 
     if (!role_name) {
-      return res.status(400).json({ message: "Role is required." });
+      return res
+        .status(400)
+        .json({ message: "Role is required.", success: false });
     }
 
     const role = await Role.createRole(role_name);
 
     return res.status(200).json({
+      success: true,
       message: "Role added successfully",
       role,
     });
   } catch (error) {
-    return res
-      .status(500)
-      .json({ message: error?.message || "Error while adding role" });
+    return res.status(500).json({
+      message: error?.message || "Error while adding role",
+      success: false,
+    });
+  }
+};
+
+const getProfileWithUsername = async (req, res) => {
+  try {
+    const { username } = req.params;
+    const { user_id } = req.query;
+
+    if (!username) {
+      return res
+        .status(400)
+        .json({ message: "Username is required.", success: false });
+    }
+
+    const usernameExists = await User.findUsername(username);
+
+    if (!usernameExists) {
+      return res
+        .status(404)
+        .json({ message: "Username not found.", success: false });
+    }
+
+    const profile = await User.getProfileWithUsername(username, user_id || null);
+
+    return res.status(200).json({
+      success: true,
+      message: "Profile fetched successfully.",
+      profile,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error?.message || "Error while fetching profile",
+    });
   }
 };
 
@@ -198,4 +272,5 @@ module.exports = {
   checkAuth,
   logout,
   addRole,
+  getProfileWithUsername,
 };
