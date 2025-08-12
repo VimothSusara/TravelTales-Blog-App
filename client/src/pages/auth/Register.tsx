@@ -45,26 +45,24 @@ const Register = () => {
 
   // Create avatar preview when file changes
   useEffect(() => {
-    if (avatarFile && avatarFile instanceof FileList && avatarFile[0]) {
-      const file = avatarFile[0];
-
-      // Validation happens in the yup schema, but we can add additional checks here
-      if (!file.type.startsWith("image/")) {
+    if (avatarFile instanceof File) {
+      if (!avatarFile.type.startsWith("image/")) {
         setError("avatar", { message: "Please select an image file" });
         return;
       }
 
-      if (file.size > 5 * 1024 * 1024) {
+      if (avatarFile.size > 5 * 1024 * 1024) {
         setError("avatar", { message: "Image must be less than 5MB" });
         return;
       }
 
-      // Create preview
       const reader = new FileReader();
       reader.onload = () => {
         setAvatarPreview(reader.result as string);
       };
-      reader.readAsDataURL(file);
+      reader.readAsDataURL(avatarFile);
+    } else {
+      setAvatarPreview(null);
     }
   }, [avatarFile, setError]);
 
@@ -235,15 +233,15 @@ const Register = () => {
                   <Controller
                     name="avatar"
                     control={control}
-                    render={({ field: { onChange, onBlur, ref } }) => (
+                    defaultValue={undefined}
+                    render={({ field }) => (
                       <Input
                         id="avatar"
                         type="file"
                         accept="image/*"
-                        ref={ref}
-                        onBlur={onBlur}
                         onChange={(e) => {
-                          onChange(e.target.files);
+                          const file = e.target.files?.[0];
+                          field.onChange(file);
                         }}
                         className={errors.avatar ? "border-red-500" : ""}
                       />
