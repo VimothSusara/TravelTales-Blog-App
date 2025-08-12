@@ -57,7 +57,7 @@ const Login = () => {
   return (
     <div className="w-full bg-gray-50">
       <Card className="w-full md:w-3/4 mx-auto mt-10">
-        <CardHeader>
+        <CardHeader>  
           <CardTitle className="text-2xl font-bold">Log In</CardTitle>
           <CardDescription>Sign In to your account</CardDescription>
         </CardHeader>

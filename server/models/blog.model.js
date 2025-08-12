@@ -155,7 +155,7 @@ class Blog {
         const user = await new Promise((getUserResolve, getUserReject) => {
           const sql = `
                 SELECT u.id, ud.username, ud.avatar_url
-                FROM users u 
+                FROM users u
                 LEFT JOIN user_details ud ON u.id = ud.user_id
                 WHERE u.id = ?
             `;

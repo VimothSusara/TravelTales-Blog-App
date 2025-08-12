@@ -6,7 +6,7 @@ export const registerSchema = yup.object({
         .string()
         .required('First Name is required')
         .min(5, 'First Name must be at least 5 characters'),
-    last_name: yup.string(),
+    last_name: yup.string().required("Last Name is required"),
     phone_number: yup
         .string()
         .required('Phone Number is required'),
@@ -28,7 +28,7 @@ export const registerSchema = yup.object({
         .test('fileType', 'Please select an image file', function (value) {
             if (!value || !(value instanceof File)) return true;
             return value.type.startsWith('image/');
-        })
+        }).required("Avatar is required"),
 });
 
 export type RegisterFormData = yup.InferType<typeof registerSchema>;
