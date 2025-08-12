@@ -143,7 +143,7 @@ const Register = () => {
                 />
                 {errors.last_name && (
                   <p className="text-sm text-red-500">
-                    {errors.last_name.message}
+                    {errors.last_name?.message}
                   </p>
                 )}
               </div>
