@@ -78,7 +78,8 @@ const Register = () => {
     formData.append("password", data.password);
 
     if (data.avatar && data.avatar instanceof FileList && data.avatar[0]) {
-      formData.append("avatar", data.avatar[0]);
+      const avatarFile = data.avatar[0];
+      formData.append("avatar", avatarFile);
     }
     const response = await registerUser(formData);
 
