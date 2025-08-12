@@ -1,8 +1,7 @@
 // src/components/RegisterPage.tsx
-import { useState, useEffect } from "react";
-import { useForm, Controller } from "react-hook-form";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { useNavigate } from "react-router-dom";
 import useAuthStore from "@/store/authStore";
 import { loginSchema, LoginFormData } from "@/schemas/loginSchema";
 
@@ -14,27 +13,22 @@ import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { Loader2, Upload } from "lucide-react";
+import { Loader2 } from "lucide-react";
 import { Flip, toast, ToastContainer } from "react-toastify";
 
 const Login = () => {
-  const navigate = useNavigate();
-  const { login: loginUser, isLoading, error, user } = useAuthStore();
+  const { login: loginUser, error } = useAuthStore();
 
   const [loginLoading, setLoginLoading] = useState(false);
 
   const {
     register,
     handleSubmit,
-    control,
     formState: { errors },
-    watch,
-    setError,
   } = useForm<LoginFormData>({
     resolver: yupResolver(loginSchema),
   });

@@ -1,7 +1,7 @@
 import { Loader2, Search, X } from "lucide-react";
 
 import { useEffect, useState } from "react";
-import Select, { components } from "react-select";
+import Select, { components, OptionProps, SingleValueProps } from "react-select";
 
 import { getCountries } from "@/services/countriesService";
 
@@ -122,6 +122,7 @@ const SearchPosts = () => {
 
   const handleSearch = async () => {
     try {
+      setIsLoadingPosts(true);
       const response = await getPosts(
         {
           country: country,

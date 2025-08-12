@@ -1,7 +1,7 @@
 //types
 import { Post } from "@/types/blog";
 
-import { formatDistance, subDays, format } from "date-fns";
+import { format } from "date-fns";
 
 //image Url
 import { getImageUrl } from "@/utils/imageLink";

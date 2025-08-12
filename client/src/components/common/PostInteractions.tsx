@@ -2,7 +2,6 @@ import {
   MessageSquare,
   Heart,
   Bookmark,
-  Share2,
   EllipsisVertical,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -25,8 +24,6 @@ const PostInteractions = ({ post }: { post: Post }) => {
   const { user } = useAuthStore();
   const [isLiked, setIsLiked] = useState(post.liked);
   const [likeCount, setLikeCount] = useState(post.likes);
-  const [commenCount, setCommentCount] = useState(post.comments);
-  const [commentRecords, setCommentRecords] = useState(post.comment_records);
 
   const handleLike = async () => {
     try {

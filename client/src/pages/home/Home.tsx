@@ -1,4 +1,3 @@
-import { useEffect } from "react";
 import { NavLink, Outlet } from "react-router-dom";
 
 import { ClockFading, HeartPulse } from "lucide-react";

@@ -1,31 +1,24 @@
-import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
 //components
 import PostViewSkeleton from "@/skeletons/PostViewSkeleton";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Button } from "@/components/ui/button";
 import PostInteractions from "@/components/common/PostInteractions";
 
 //hooks
 import useBlogPost from "@/hooks/useBlogPost";
-import useCountryDataByName from "@/hooks/useCountryDataByName";
 import { getImageUrl } from "@/utils/imageLink";
 
 //store
-import useAuthStore from "@/store/authStore";
+// import useAuthStore from "@/store/authStore";
 
 //sample flag image
-import flag from "@/assets/images/flag-default.png";
+// import flag from "@/assets/images/flag-default.png";
 import PostComments from "@/components/common/PostComments";
 import PostHeaderView from "@/components/common/PostHeaderView";
 
 const RecentPostView = () => {
-  const { isAuthenticated, user } = useAuthStore();
   const {
-    slug,
-    username,
     id: blog_id,
   } = useParams<{ slug: string; id: string }>();
 

@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 
-import { formatDistance, subDays, format } from "date-fns";
+import { format } from "date-fns";
 
 //types
 import { Post } from "@/types/blog";
@@ -28,7 +28,6 @@ import {
   Heart,
   EllipsisVertical,
   BookmarkPlus,
-  BookmarkMinus,
 } from "lucide-react";
 
 const RecentPostCard = ({ post }: { post: Post }) => {

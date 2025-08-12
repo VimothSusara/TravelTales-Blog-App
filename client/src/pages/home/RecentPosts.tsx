@@ -12,7 +12,6 @@ import { getPosts } from "@/services/blogService";
 import { Button } from "@/components/ui/button";
 import { InPageLoadingScreen } from "@/components/common/InPageLoadingScreen";
 import useAuthStore from "@/store/authStore";
-import { SinglePostSkeleton } from "@/skeletons/SinglePostSkeleton";
 
 const RecentPosts = () => {
   const { user } = useAuthStore();
@@ -22,7 +21,7 @@ const RecentPosts = () => {
   const [hasMore, setHasMore] = useState(false);
   const [error, setError] = useState("");
   const limit = 5;
-  const abortControllerRef = useRef<AbortController>();
+  const abortControllerRef = useRef<AbortController>(null);
 
   const fetchPosts = async (pageToFetch: number) => {
     setLoading(true);
@@ -76,10 +75,6 @@ const RecentPosts = () => {
     fetchPosts(nextPage);
   };
 
-  const handleRefresh = () => {
-    fetchPosts(1);
-  };
-
   return (
     <div className="w-full md:w-5/6 mx-auto">
       {loading && posts.length === 0 && <InPageLoadingScreen />}
@@ -105,6 +100,8 @@ const RecentPosts = () => {
       {!hasMore && posts.length > 0 && (
         <p className="text-gray-500 text-center">You've reached the end!</p>
       )}
+
+      {error && <p className="text-red-500 text-center">{error}</p>}
     </div>
   );
 };

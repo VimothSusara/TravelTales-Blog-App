@@ -24,7 +24,7 @@ import { Flip, toast, ToastContainer } from "react-toastify";
 
 const Register = () => {
   const navigate = useNavigate();
-  const { register: registerUser, isLoading, error, user } = useAuthStore();
+  const { register: registerUser, error} = useAuthStore();
 
   const [registerLoading, setRegisterLoading] = useState(false);
   const [avatarPreview, setAvatarPreview] = useState<string | null>(null);

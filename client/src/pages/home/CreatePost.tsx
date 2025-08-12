@@ -6,7 +6,7 @@ import Underline from "@tiptap/extension-underline";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { X, Loader2 } from "lucide-react";
-import { ToastContainer, toast, Slide, Flip } from "react-toastify";
+import { ToastContainer, toast, Flip } from "react-toastify";
 import Select, { components } from "react-select";
 
 //types

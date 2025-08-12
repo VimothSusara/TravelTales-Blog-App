@@ -17,8 +17,6 @@ const PostHeaderView = ({ post }: { post: Post }) => {
   const countryName = post?.country_name;
   const {
     country,
-    loading: countryLoading,
-    error: countryError,
   } = useCountryDataByName(countryName);
 
   const handleFollow = async () => {

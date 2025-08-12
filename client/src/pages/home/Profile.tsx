@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Post } from "@/types/blog";
-import PostCard from "@/components/cards/PostCard";
 import {
   followUser,
   getPostsByUser,
@@ -43,7 +42,7 @@ const Profile = () => {
   const { user } = useAuthStore();
   const [profile, setProfile] = useState<ProfileData | null>(null);
   const [userPosts, setUserPosts] = useState<Post[]>([]);
-  const [followingPosts, setFollowingPosts] = useState<Post[]>([]);
+  // const [followingPosts, setFollowingPosts] = useState<Post[]>([]);
   const [activeTab, setActiveTab] = useState<"user" | "following">("user");
   const [loading, setLoading] = useState({
     profile: false,
@@ -87,19 +86,19 @@ const Profile = () => {
   };
 
   // Fetch posts from users this profile follows
-  const fetchFollowingPosts = async () => {
-    try {
-      setLoading((prev) => ({ ...prev, posts: true }));
-      if (profile) {
-        const response = await getFollowingPosts(profile.id);
-        setFollowingPosts(response.data.posts);
-      }
-    } catch (error) {
-      console.error("Failed to fetch following posts:", error);
-    } finally {
-      setLoading((prev) => ({ ...prev, posts: false }));
-    }
-  };
+  // const fetchFollowingPosts = async () => {
+  //   try {
+  //     setLoading((prev) => ({ ...prev, posts: true }));
+  //     if (profile) {
+  //       const response = await getFollowingPosts(profile.id);
+  //       setFollowingPosts(response.data.posts);
+  //     }
+  //   } catch (error) {
+  //     console.error("Failed to fetch following posts:", error);
+  //   } finally {
+  //     setLoading((prev) => ({ ...prev, posts: false }));
+  //   }
+  // };
 
   // Handle follow/unfollow
   const handleFollowAction = async () => {
@@ -153,25 +152,25 @@ const Profile = () => {
     if (profile) {
       fetchUserPosts();
       if (activeTab === "following") {
-        fetchFollowingPosts();
+        // fetchFollowingPosts();
       }
     }
   }, [profile, activeTab]);
 
-  const handleViewPost = (post) => {
-    navigate(`/blog/${post.username}/${post.slug}/${post.id}`);
+  const handleViewPost = (post: Post) => {
+    navigate(`/blog/${post.author.username}/${post.slug}/${post.id}`);
   };
 
-  const handleDeletePost = async (post) => {
-    try {
-      await deletePost(post.id);
-      fetchUserPosts();
-    } catch (error) {
-      console.error("Failed to delete post:", error);
-    }
-  };
+  // const handleDeletePost = async (post) => {
+  //   try {
+  //     await deletePost(post.id);
+  //     fetchUserPosts();
+  //   } catch (error) {
+  //     console.error("Failed to delete post:", error);
+  //   }
+  // };
 
-  const handleEditPost = (post) => {
+  const handleEditPost = (post: Post) => {
     navigate(`/blog/edit/${post.id}`);
   };
 
@@ -320,7 +319,7 @@ const Profile = () => {
                                 Edit
                               </DropdownMenuItem>
                               <DropdownMenuItem
-                                onClick={() => handleDeletePost(post)}
+                                onClick={() => {}}
                               >
                                 Delete
                               </DropdownMenuItem>
@@ -342,8 +341,6 @@ const Profile = () => {
                 No posts yet
               </p>
             )
-          ) : followingPosts.length > 0 ? (
-            followingPosts.map((post) => <PostCard key={post.id} post={post} />)
           ) : (
             <p className="text-gray-500 col-span-full text-center py-8">
               {profile.follow_details.following_count === 0
